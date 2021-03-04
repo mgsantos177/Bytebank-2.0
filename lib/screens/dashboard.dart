@@ -1,7 +1,6 @@
 import 'package:bytebank/screens/contacts_list.dart';
 import 'package:bytebank/screens/transactions_list.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 class Dashboard extends StatelessWidget {
   @override
@@ -13,34 +12,29 @@ class Dashboard extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.asset('images/bytebank_logo.png'),
           ),
           Container(
             height: 120,
-            child: ListView(scrollDirection: Axis.horizontal, children: [
-              Row(
-                children: [
-                  _FeatureItem(
-                    name: 'Transfer',
-                    icon: Icons.monetization_on,
-                    onClick: () {
-                      _showContactsList(context);
-                    },
-                  ),
-                  _FeatureItem(
-                    name: 'TransferFeed',
-                    icon: Icons.description,
-                    onClick: () {
-                      _showTransactionsList(context);
-                    },
-                  ),
-                ],
-              ),
-            ]),
-          )
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: <Widget>[
+                _FeatureItem(
+                  'Transfer',
+                  Icons.monetization_on,
+                  onClick: () => _showContactsList(context),
+                ),
+                _FeatureItem(
+                  'Transaction Feed',
+                  Icons.description,
+                  onClick: () => _showTransactionsList(context),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -54,7 +48,7 @@ class Dashboard extends StatelessWidget {
     );
   }
 
-  void _showTransactionsList(BuildContext context) {
+  _showTransactionsList(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => TransactionsList(),
@@ -68,9 +62,12 @@ class _FeatureItem extends StatelessWidget {
   final IconData icon;
   final Function onClick;
 
-  _FeatureItem({this.name, this.icon, @required this.onClick})
-      : assert(icon != null),
-        assert(onClick != null);
+  _FeatureItem(
+    this.name,
+    this.icon, {
+    @required this.onClick,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -78,14 +75,14 @@ class _FeatureItem extends StatelessWidget {
       child: Material(
         color: Theme.of(context).primaryColor,
         child: InkWell(
+          onTap: () => onClick(),
           child: Container(
-            padding: EdgeInsets.all(8),
-            height: 100,
-            width: 159,
+            padding: EdgeInsets.all(8.0),
+            width: 150,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
                 Icon(
                   icon,
                   color: Colors.white,
@@ -93,12 +90,14 @@ class _FeatureItem extends StatelessWidget {
                 ),
                 Text(
                   name,
-                  style: TextStyle(color: Colors.white, fontSize: 16.0),
-                ),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                  ),
+                )
               ],
             ),
           ),
-          onTap: () => onClick(),
         ),
       ),
     );
